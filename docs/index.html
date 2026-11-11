@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小新 AI 语音机器人 · ESP32-S3 版在线路书</title>
+  <title>小新 · AI 桌面客服搭子 | ESP32-S3 版</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%230e7c72'/%3E%3C/svg%3E">
-  <meta name="description" content="小新 AI 语音机器人 ESP32-S3 版：编译、烧录、配网、OTA 和二次开发路书。">
+  <meta name="description" content="小新 · AI 桌面客服搭子（ESP32-S3 版）：产品介绍、编译、烧录、配网、OTA 和二次开发路书。">
   <style>
 
     @font-face {
@@ -678,8 +678,8 @@
 <header class="hero" id="top">
   <div class="hero-inner">
     <div class="eyebrow">Online Guide · ESP32-S3</div>
-    <h1>小新 AI 语音机器人<br><span class="sub">ESP32-S3 版</span></h1>
-    <p class="lead">只想用设备：烧固件、配网，就能开始用。想改代码：装好 ESP-IDF，按本文步骤编译。每一步都告诉你做什么、看到什么算成功、卡住了怎么办。</p>
+    <h1>小新 · AI 桌面客服搭子<br><span class="sub">ESP32-S3 版</span></h1>
+    <p class="lead">小新是一台放在桌面上的 AI 客服搭子：语音问答、消息播报、后台内容推送。这个仓库是 ESP32-S3 版；只想用设备：烧固件、配网；想改代码：装 ESP-IDF 编译。</p>
     <div class="lane-chips">
       <span class="chip">ESP32-S3</span>
       <span class="chip">Wi-Fi + ML307 4G</span>
@@ -715,7 +715,7 @@
       <span class="section-num">01</span>
       <div>
         <h2>这是什么</h2>
-        <p class="section-sub">这是一块能听、能说的 AI 语音机器人主板。你唤醒它、说话，它把声音发给后台，后台识别并生成回答，再把语音发回来播放。</p>
+        <p class="section-sub">小新是一台放在桌面上的 AI 客服搭子，支持语音问答、消息播报和后台内容推送。这个仓库是 ESP32-S3 版，硬件配置以实际板子为准；产品外观、屏幕和交互以说明书为准。</p>
       </div>
     </div>
 
@@ -737,8 +737,14 @@
           <tr><td><strong>人体雷达</strong></td><td>检测有人在不在，控制自动休眠和问候</td><td>改检测距离、加自动亮屏逻辑</td></tr>
           <tr><td><strong>配网 / 远程升级</strong></td><td>手机连设备热点配网，后台远程升级固件</td><td>改配网页面、接自己的升级服务</td></tr>
           <tr><td><strong>二次开发</strong></td><td>引脚、显示、音频、联网、雷达都可以改</td><td>加传感器、加控制工具、做自己的产品</td></tr>
+          <tr><td><strong>后台内容</strong></td><td>改开机问候语、推送消息、维护知识库（以后台实际功能为准）</td><td>接自己的后台和知识库</td></tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="callout" style="max-width:820px;">
+      <strong>后台能做什么</strong>
+      <p>后台可以改开机问候语、推送消息、维护知识库。设备在线会立即收到，离线会在下次上线时收到。后台地址和账号由卖家提供，具体功能以后台实际版本为准。</p>
     </div>
 
     <h3 style="margin:1.4rem 0 0.6rem;font-size:1.05rem;">硬件规格</h3>
@@ -755,6 +761,8 @@
         </tbody>
       </table>
     </div>
+
+    <p style="color:var(--muted);font-size:0.88rem;">开发者版硬件以实际板子为准；量产版外观、屏幕、磁吸底座和触摸交互以产品说明书为准。</p>
 
     <h3 style="margin:1.4rem 0 0.6rem;font-size:1.05rem;">仓库里有什么</h3>
     <pre class="cmd">.
@@ -1038,7 +1046,7 @@ idf.py build</pre>
 
     <div class="callout ok">
       <strong>卖家已确认</strong>
-      <p>本页对应发货版本 2.0.4。固件、源码、板级配置、文档和校验值已随买家资料包核对。按「最短上手」或「自己编译」操作即可；遇到问题按第 06 节处理。</p>
+      <p>本页对应发货版本 2.0.4。固件、源码、板级配置、文档和校验值已随买家资料包核对；产品外观、屏幕、交互和包装以说明书为准。按「最短上手」或「自己编译」操作即可；遇到问题按第 06 节处理。</p>
     </div>
   </section>
 
@@ -1061,6 +1069,8 @@ idf.py build</pre>
           <tr><td>商标与隶属</td><td>ESP32-S3、ESP-IDF、ESP-SR 等名称和商标归 Espressif 及相关权利人所有；本项目与 Espressif 无隶属关系，也不代表其官方背书。</td></tr>
           <tr><td>产品素材</td><td>产品外观、结构、图片、GIF、字体、唤醒词、提示音等素材由卖家确认已获授权；买家二次开发或再分发时需自行确认授权。</td></tr>
           <tr><td>无线电与合规</td><td>设备涉及无线电发射，销售和使用需遵守当地无线电管理、入网认证和数据合规要求。</td></tr>
+          <tr><td>AI 内容</td><td>生成内容可能有误，不构成专业建议；涉及具体企业/产品信息，以官方公告为准；请勿用于违法、敏感或误导性用途。</td></tr>
+          <tr><td>使用安全</td><td>使用 5V/2A 且符合 CCC 认证的充电器；不防水；3 岁以下儿童勿用；内置电池不可拆卸；远离热源和强磁场。</td></tr>
           <tr><td>免责声明</td><td>本页内容按“现状”提供，不构成对二次开发、改装或特定用途的保证，也不构成法律意见；因错误烧录、改装或第三方授权问题造成的损失，卖家不承担责任。</td></tr>
         </tbody>
       </table>
