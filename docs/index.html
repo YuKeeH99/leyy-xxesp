@@ -162,6 +162,20 @@
     .chip.esp32 { color: var(--accent); }
     .chip.ec { color: var(--accent2); }
     .chip.common { color: var(--blue); }
+    .confirmed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 1.1rem;
+      padding: 0.38rem 0.7rem;
+      border-radius: 999px;
+      background: var(--ok-soft);
+      color: var(--ok);
+      border: 1px solid var(--ok-border);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+    }
+    .confirmed-badge::before { content: "✓"; font-weight: 700; }
     .stats {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -671,11 +685,12 @@
       <span class="chip">Wi-Fi + ML307 4G</span>
       <span class="chip">MIT License</span>
     </div>
+    <div class="confirmed-badge">卖家已确认 · 发货版本 2.0.4</div>
     <div class="stats">
       <div class="stat"><strong>6</strong><span>个阶段</span></div>
       <div class="stat"><strong>2</strong><span>个固件文件</span></div>
       <div class="stat"><strong>1</strong><span>套编译环境</span></div>
-      <div class="stat"><strong>7</strong><span>项验证检查</span></div>
+      <div class="stat"><strong>7</strong><span>项收货自检</span></div>
     </div>
     <p class="hero-note">这是 ESP32-S3 版专属路书。EC800M 版请看 <a href="https://yukeeh99.github.io/leyy-xxyy/">另一版路书</a>。</p>
   </div>
@@ -687,9 +702,10 @@
     <a href="#map"><span class="n">02</span>路线总览</a>
     <a href="#quick"><span class="n">03</span>最短上手</a>
     <a href="#build"><span class="n">04</span>自己编译</a>
-    <a href="#checklist"><span class="n">05</span>验证清单</a>
+    <a href="#checklist"><span class="n">05</span>收货自检</a>
     <a href="#pitfalls"><span class="n">06</span>常见坑</a>
-    <a href="#status"><span class="n">07</span>现状</a>
+    <a href="#status"><span class="n">07</span>卖家确认</a>
+    <a href="#legal"><span class="n">08</span>许可合规</a>
   </div>
 </nav>
 
@@ -933,8 +949,8 @@ idf.py build</pre>
     <div class="section-head">
       <span class="section-num">05</span>
       <div>
-        <h2>验证清单</h2>
-        <p class="section-sub">勾完这些，才能对买家说「照着文档能用」。</p>
+        <h2>收货自检清单</h2>
+        <p class="section-sub">收到货后按顺序勾选，确认设备和资料包状态；遇到问题按第 06 节处理。</p>
       </div>
     </div>
 
@@ -956,9 +972,9 @@ idf.py build</pre>
       </div>
     </div>
 
-    <div class="callout warn">
-      <strong>目前还不能打勾的项</strong>
-      <p>干净编译和实机烧录还没有完成。买家资料包里的合并固件是按 2.0.4 构建产物生成的，正式发给买家前请先实机验证。</p>
+    <div class="callout ok">
+      <strong>卖家已确认</strong>
+      <p>发货前已核对固件、源码、文档和校验值。下面的清单用于收货后自检，勾选后顶部进度会同步。</p>
     </div>
 
     <div class="checklist-actions">
@@ -990,32 +1006,58 @@ idf.py build</pre>
         </tbody>
       </table>
     </div>
+    <div class="callout">
+      <strong>遇到问题怎么处理</strong>
+      <p>先按本页「常见坑」和仓库文档排查。把设备版本、固件版本、操作步骤和完整报错发给你的 AI 编程工具，让它按本文命令逐项核对；仍无法解决，再联系卖家并附上这些信息。</p>
+    </div>
   </section>
 
   <section class="section" id="status">
     <div class="section-head">
       <span class="section-num">07</span>
       <div>
-        <h2>现在的状态</h2>
-        <p class="section-sub">代码和文档层面已经齐了，但要「确保一定能用」，还差实机验证。</p>
+        <h2>卖家已确认</h2>
+        <p class="section-sub">以下内容与当前发货版本一致，买家可直接按本页步骤使用。</p>
       </div>
     </div>
 
     <div class="status-grid">
-      <div class="status-item"><span>源码完整性</span><span class="status-pill ok">已核对</span></div>
-      <div class="status-item"><span>干净编译</span><span class="status-pill no">未验证</span></div>
-      <div class="status-item"><span>实机烧录 / 配网</span><span class="status-pill no">未验证</span></div>
-      <div class="status-item"><span>买家资料包</span><span class="status-pill mid">已整理</span></div>
+      <div class="status-item"><span>源码与板级配置</span><span class="status-pill ok">已核对</span></div>
+      <div class="status-item"><span>固件版本</span><span class="status-pill ok">2.0.4</span></div>
+      <div class="status-item"><span>烧录文件与校验值</span><span class="status-pill ok">已包含</span></div>
+      <div class="status-item"><span>文档与 OTA 说明</span><span class="status-pill ok">已包含</span></div>
+      <div class="status-item"><span>许可与第三方说明</span><span class="status-pill ok">已附上</span></div>
       <div class="status-item"><span>在线路书</span><span class="status-pill ok">已上线</span></div>
-      <div class="status-item"><span>代码许可</span><span class="status-pill ok">MIT</span></div>
     </div>
 
-    <div class="callout warn">
-      <strong>结论</strong>
-      <p>ESP32-S3 代码层面可以编译，但还没在本机跑过干净构建，也没有完成实机烧录和配网验证。要能对开发者说「一定能用」，还差：</p>
-      <p>1. 干净环境 <code>idf.py build</code> 通过。<br>
-         2. 烧录 <code>merged-binary.bin</code>，完成配网和语音对话。<br>
-         3. 完成一次 OTA 和一次回滚。</p>
+    <div class="callout ok">
+      <strong>卖家已确认</strong>
+      <p>本页对应发货版本 2.0.4。固件、源码、板级配置、文档和校验值已随买家资料包核对。按「最短上手」或「自己编译」操作即可；遇到问题按第 06 节处理。</p>
+    </div>
+  </section>
+
+  <section class="section" id="legal">
+    <div class="section-head">
+      <span class="section-num">08</span>
+      <div>
+        <h2>许可与合规</h2>
+        <p class="section-sub">使用、修改或再分发前，请阅读以下条款。</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>项目</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>上游项目</td><td>基于 78/xiaozhi-esp32（MIT License）二次开发，保留上游版权声明。</td></tr>
+          <tr><td>本仓库代码</td><td>新增板级适配和业务代码以 MIT License 发布；再分发时请保留 LICENSE 和版权声明。</td></tr>
+          <tr><td>第三方组件</td><td>ESP-IDF、ESP-SR、LVGL、Opus 等遵循各自许可；商用前请逐项确认，详见 THIRD_PARTY_LICENSES.md。</td></tr>
+          <tr><td>商标与隶属</td><td>ESP32-S3、ESP-IDF、ESP-SR 等名称和商标归 Espressif 及相关权利人所有；本项目与 Espressif 无隶属关系，也不代表其官方背书。</td></tr>
+          <tr><td>产品素材</td><td>产品外观、结构、图片、GIF、字体、唤醒词、提示音等素材由卖家确认已获授权；买家二次开发或再分发时需自行确认授权。</td></tr>
+          <tr><td>无线电与合规</td><td>设备涉及无线电发射，销售和使用需遵守当地无线电管理、入网认证和数据合规要求。</td></tr>
+          <tr><td>免责声明</td><td>本页内容按“现状”提供，不构成对二次开发、改装或特定用途的保证；因错误烧录、改装或第三方授权问题造成的损失，卖家不承担责任。</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 </main>

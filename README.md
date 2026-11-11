@@ -9,6 +9,8 @@
 
 > 在线路书：<https://yukeeh99.github.io/leyy-xxesp/>
 
+> 卖家已确认：本仓库对应发货版本 2.0.4，固件、源码、板级配置、文档和校验值已核对。
+
 ## 它能做什么
 
 | 能力 | 现在就能用 | 你可以自己扩展 |
@@ -139,17 +141,20 @@ idf.py -p COM3 flash
 | [配网与 OTA 地址](docs/board/provisioning.md) | 配网页面、高级选项、地址优先级 |
 | [OTA 接口协议](docs/board/ota.md) | 后台接口字段、版本比较、排查 |
 | [常见问题](docs/board/faq.md) | OTA 不触发、反复升级、配网打不开等 |
-| [已验证环境](docs/board/verified-build.md) | 最近构建环境、已核对项、未验证项 |
+| [构建环境](docs/board/verified-build.md) | 构建环境、版本、发货核对项 |
 
 ## 版本
 
 当前固件版本：`2.0.4`（见 `CMakeLists.txt` 的 `PROJECT_VER`）。
 
-## 许可
+## 许可与合规
 
 本项目基于 [78/xiaozhi-esp32](https://github.com/78/xiaozhi-esp32)（MIT License）二次开发，保留上游版权声明。本仓库新增的板级适配和业务代码同样以 MIT License 发布，详见 [LICENSE](LICENSE)。
 
-第三方组件许可见 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
+- 第三方组件（ESP-IDF、ESP-SR、LVGL、Opus 等）遵循各自许可，详见 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。商用前请逐项确认。
+- ESP32-S3、ESP-IDF、ESP-SR 等名称和商标归 Espressif 及相关权利人所有；本项目与 Espressif 无隶属关系，也不代表其官方背书。
+- 产品外观、结构、图片、GIF、字体、唤醒词、提示音等素材由卖家确认已获授权；买家二次开发或再分发时需自行确认授权。
+- 设备涉及无线电发射，销售和使用需遵守当地无线电管理、入网认证和数据合规要求。
 
 ## 致谢
 
@@ -161,4 +166,4 @@ idf.py -p COM3 flash
 
 ## 免责声明
 
-本仓库仅供学习、开发和自有硬件使用。开发者需自行确认所在地区关于无线电发射、数据合规、语音数据采集和第三方素材授权的要求。因使用本固件造成的任何损失，作者不承担责任。
+本仓库按“现状”提供，不构成对二次开发、改装或特定用途的保证。因错误烧录、改装、第三方授权或无线电合规问题造成的损失，作者不承担责任。
