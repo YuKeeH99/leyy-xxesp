@@ -137,6 +137,7 @@ idf.py -p COM3 flash
 | [配网与 OTA 地址](docs/board/provisioning.md) | 配网页面、高级选项、地址优先级 |
 | [OTA 接口协议](docs/board/ota.md) | 后台接口字段、版本比较、排查 |
 | [常见问题](docs/board/faq.md) | OTA 不触发、反复升级、配网打不开等 |
+| [已验证环境](docs/board/verified-build.md) | 最近构建环境、已核对项、未验证项 |
 
 ## 版本
 
@@ -145,6 +146,8 @@ idf.py -p COM3 flash
 ## 许可
 
 本项目基于 [78/xiaozhi-esp32](https://github.com/78/xiaozhi-esp32)（MIT License）二次开发，保留上游版权声明。本仓库新增的板级适配和业务代码同样以 MIT License 发布，详见 [LICENSE](LICENSE)。
+
+第三方组件许可见 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
 
 ## 致谢
 
