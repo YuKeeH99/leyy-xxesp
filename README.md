@@ -1,62 +1,108 @@
 # 小新 AI 语音机器人（ESP32-S3）
 
-基于开源项目 [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32) 二次开发的 ESP32-S3 AI 语音终端固件，适配「绿板小新 / 新思版」硬件（`meijing-xinsi`）。
+一个能听、能说、会看表情的桌面 AI 语音机器人固件。
 
-设备通过 Wi-Fi 或板载 ML307 Cat.1 4G 连接后台，完成语音唤醒、录音上传、云端 ASR / LLM / TTS、音频播放、表情显示和 OTA 升级。仓库包含完整可编译源码、板级配置、开发文档和 OTA 接口说明。
+主控 ESP32-S3，支持 Wi-Fi 和 ML307 Cat.1 4G 双网络，板载 1.28 寸 LCD、OLED、ES8311 / ES7210 音频和 2410D 毫米波雷达。设备通过 Wi-Fi 或 4G 连接后台，完成语音唤醒、录音上传、云端 ASR / LLM / TTS、音频播放、表情显示和 OTA 升级。
+
+> **本仓库定位**：完整可编译的 ESP32-S3 固件 + 板级适配 + 开发文档。
+> 买到硬件的用户可以直接烧录预编译固件；想二次开发的用户可以在本仓库改显示、语音、联网、雷达和 OTA。
+
+## 它能做什么
+
+| 能力 | 现在就能用 | 你可以自己扩展 |
+| --- | --- | --- |
+| **语音对话** | 唤醒词唤醒，录音上传，云端 ASR + LLM + TTS，Opus 播放 | 换唤醒词、换音色、接自己的 ASR / LLM / TTS |
+| **双网络** | Wi-Fi 和 ML307 Cat.1 4G 自动切换 | 改 APN、改网络优先级、加 MQTT |
+| **显示** | 128×128 LCD 表情 / 时钟，128×32 OLED 状态 | 改 UI、加页面、换字体、换表情 |
+| **雷达** | 2410D 人体存在检测，影响休眠和问候 | 改检测距离、加自动亮屏 / 休眠逻辑 |
+| **配网** | `MJ-XXXX` 热点 + `http://192.168.4.1` 页面 | 改页面、加自定义字段、改 OTA 地址 |
+| **OTA** | 双分区 OTA，后台返回版本和 WebSocket 地址 | 接自己的 OTA 服务、加灰度 / 强制升级 |
+| **MCP** | 设备端 MCP 工具，可通过后台控制音量、灯、GPIO | 加自己的 MCP 工具 |
+| **工厂测试** | 按键进入工厂测试模式 | 加产测项、改测试流程 |
 
 ## 硬件规格
 
 | 项目 | 参数 |
 | --- | --- |
 | 主控 | ESP32-S3，双核 240 MHz，Xtensa LX7 |
-| Flash | 16 MB |
-| PSRAM | 8 MB（Octal） |
-| 无线 | Wi-Fi 2.4 GHz + ML307 Cat.1 4G（双网络可切换） |
-| 主显示屏 | NV3023，128×128，RGB565，SPI3 |
-| 副显示屏 | SSD1306 OLED，128×32，I2C |
-| 音频 | ES8311 DAC + ES7210 ADC（双通道，含 AEC 回采） |
-| 雷达 | 海凌科 2410D 毫米波雷达，UART2，115200 |
+| Flash / PSRAM | 16 MB Flash / 8 MB Octal PSRAM |
+| 无线 | Wi-Fi 2.4 GHz + ML307 Cat.1 4G |
+| 主屏 | NV3023 128×128 LCD（SPI3） |
+| 副屏 | SSD1306 OLED 128×32（I2C） |
+| 音频 | ES8311 DAC + ES7210 ADC（含 AEC 回采） |
+| 雷达 | 海凌科 2410D（UART2，115200） |
 | 按键 | BOOT / 音量+（GPIO0）、音量−（GPIO46） |
-| 供电 | USB / 电池（电池检测电路预留，当前固件未启用） |
 
-### 引脚
+完整引脚表见 [硬件说明](docs/board/hardware.md)。
 
-| 外设 | 引脚 |
+## 3 分钟上手（只想使用）
+
+1. 用 USB 连接设备，确认串口。
+2. 安装 esptool：
+
+   ```bash
+   pip install esptool
+   ```
+
+3. 烧录整片固件：
+
+   ```bash
+   python -m esptool --chip esp32s3 -p COM3 -b 460800 write_flash 0x0 merged-binary.bin
+   ```
+
+4. 设备重启后连接热点 `MJ-XXXX`，打开 `http://192.168.4.1`。
+5. 在「高级选项」填写 OTA 地址，回到「Wi-Fi」连接路由器，断电重启。
+
+详细步骤见 [快速上手](docs/board/build.md) 和 [配网与 OTA 地址](docs/board/provisioning.md)。
+
+## 自己编译（想开发）
+
+```bash
+# 1. 安装并激活 ESP-IDF 5.5.1
+. $HOME/esp/esp-idf/export.sh
+
+# 2. 编译
+idf.py set-target esp32s3
+idf.py build
+```
+
+仓库已附带验证过的 `sdkconfig`，默认板型 `meijing-xinsi`。如果 `set-target` 覆盖了配置，进入 `idf.py menuconfig` 选择：
+
+```text
+Xiaozhi Assistant → Board Type → 美好憧憬科技ESP32-S3开发板(新思版)
+```
+
+首次编译会从 ESP-IDF 组件仓库下载约 470 MB 依赖，需要联网。
+
+烧录：
+
+```bash
+idf.py -p COM3 flash
+```
+
+## 卡住了先看这里
+
+| 现象 | 检查方法 |
 | --- | --- |
-| LCD | CS=GPIO21，DC=GPIO39，MOSI=GPIO40，SCLK=GPIO41 |
-| OLED / 音频 I2C | SDA=GPIO1，SCL=GPIO2 |
-| 背光 | GPIO42（PWM，低电平有效） |
-| 音频 I2S | MCLK=GPIO38，WS=GPIO13，BCLK=GPIO14，DIN=GPIO12，DOUT=GPIO45 |
-| 功放使能 | GPIO47 |
-| 雷达 | TX=GPIO15，RX=GPIO16 |
-| ML307 4G | 模组 TX→GPIO17，模组 RX→GPIO18 |
-| 状态灯 | GPIO48 |
+| 找不到串口 | 换数据线、换 USB 口，安装 CH340 / CP210x 驱动 |
+| 烧录失败 | 降低波特率到 115200，确认串口没有被其他程序占用 |
+| 配网页面打不开 | 确认连的是 `MJ-XXXX`，手动输入 `http://192.168.4.1` |
+| OTA 不触发 | 版本号是否递增、后台是否发布、下载地址是否可达 |
+| 升级后还是旧功能 | 是否上传了 `xiaozhi.bin`，是否写对 OTA 分区 |
+| 设备反复升级 | 后台登记版本高于实际文件版本，核对 MD5 |
+| 设备反复重启 | 串口看是否有 task watchdog，检查显示 / 内存 |
 
-> 摄像头（DVP）和触摸屏（FT5x06）的引脚已在 `main/boards/meijing-xinsi/config.h` 中定义，当前固件未启用。
+更多问题见 [常见问题](docs/board/faq.md)。
 
-## 功能
-
-- Wi-Fi / ML307 Cat.1 4G 双网络
-- 离线语音唤醒（ESP-SR）
-- WebSocket 流式语音交互（ASR + LLM + TTS）
-- Opus 音频编解码
-- 128×128 LCD 表情 / 时钟显示 + 128×32 OLED 状态显示
-- 2410D 毫米波雷达人体存在检测
-- 配网页面（AP 热点）与自定义 OTA 地址
-- OTA 双分区升级
-- 工厂测试模式
-- MCP 设备控制
-
-## 目录结构
+## 仓库里有什么
 
 ```text
 .
 ├── CMakeLists.txt
 ├── sdkconfig                  # 本板验证过的编译配置
-├── sdkconfig.defaults
 ├── partitions/v1/16m.csv      # 16MB Flash 分区表
 ├── main/
-│   ├── boards/meijing-xinsi/  # 本板引脚、显示、音频、雷达初始化
+│   ├── boards/meijing-xinsi/  # 引脚、显示、音频、雷达初始化
 │   ├── display/               # LCD / OLED / 时钟 / GIF 表情
 │   ├── audio_codecs/          # ES8311 / ES7210
 │   ├── radar/                 # 2410D 雷达驱动
@@ -66,97 +112,28 @@
 └── docs/board/                # 本板开发文档
 ```
 
-## 快速开始
+**不在仓库里的**：`build/`、`managed_components/`（首次编译自动下载）、真实 Wi-Fi 密码、设备 NVS 备份、量产工具。
 
-### 1. 准备环境
+## 二次开发：改什么从哪里下手
 
-- ESP-IDF **5.5.1**（5.4 及以上一般也可）
-- Python 3.8+
-- Windows / Linux / macOS 均可
-
-```bash
-# Linux / macOS / WSL
-. $HOME/esp/esp-idf/export.sh
-
-# Windows PowerShell
-C:\Espressif\frameworks\esp-idf-v5.5\export.ps1
-```
-
-### 2. 编译
-
-```bash
-idf.py set-target esp32s3
-idf.py build
-```
-
-仓库已经附带验证过的 `sdkconfig`，默认板型是 `meijing-xinsi`。如果 `set-target` 覆盖了配置，进入：
-
-```bash
-idf.py menuconfig
-```
-
-选择：
-
-```text
-Xiaozhi Assistant → Board Type → 美好憧憬科技ESP32-S3开发板(新思版)
-```
-
-对应配置项 `CONFIG_BOARD_TYPE_MEIJING_XINSI`。
-
-首次编译会从 ESP-IDF 组件仓库下载依赖（约 470 MB），需要联网。
-
-### 3. 烧录
-
-```bash
-idf.py -p <串口> flash
-```
-
-或使用合并镜像整片烧录：
-
-```bash
-python -m esptool --chip esp32s3 -p <串口> -b 460800 write_flash 0x0 build/merged-binary.bin
-```
-
-### 4. 配网
-
-1. 设备上电后 60 秒内连不上 Wi-Fi，自动进入配网模式；Wi-Fi 模式下长按「音量−」也可进入。
-2. 连接热点 `MJ-XXXX`（无密码）。
-3. 浏览器打开 `http://192.168.4.1`。
-4. 在「高级选项」里填写自己的 OTA 地址，保存后连接 Wi-Fi，断电重启。
-
-详细步骤见 [配网与 OTA 地址](docs/board/provisioning.md)。
-
-## OTA
-
-- OTA 只上传 `build/xiaozhi.bin`，**不要**上传 `merged-binary.bin`。
-- 每次发布前递增 `CMakeLists.txt` 中的 `PROJECT_VER`。
-- 后台 OTA 接口需要同时返回 `firmware` 和 `websocket` 字段。
-
-接口格式和排查步骤见 [OTA 接口协议](docs/board/ota.md)。
-
-## 一键发布
-
-```bash
-python scripts/release.py meijing-xinsi
-```
-
-产物位于 `releases/v<版本号>_meijing-xinsi.zip`，内含 `merged-binary.bin`。
-
-## 二次开发
-
-- 修改引脚：`main/boards/meijing-xinsi/config.h`
-- 修改板级初始化：`main/boards/meijing-xinsi/meijing_xinsi_board.cc`
-- 修改唤醒词/提示音：`main/assets/` 与 `scripts/gen_lang.py`
-- 修改显示/表情：`main/display/` 与 `main/gif/`
-- 修改后台地址：配网页面「高级选项」或 `main/Kconfig.projbuild` 中的 `CONFIG_OTA_URL`
-- 设备绑定 / 二维码接口地址：`main/application.h` 中的 `base_url`（自建后台时需要一并修改）
+| 想改什么 | 文件位置 |
+| --- | --- |
+| 引脚、外设 | `main/boards/meijing-xinsi/config.h` |
+| 板级初始化 | `main/boards/meijing-xinsi/meijing_xinsi_board.cc` |
+| 显示、表情、时钟 | `main/display/`、`main/gif/` |
+| 音频编解码 | `main/audio_codecs/` |
+| 雷达 | `main/radar/` |
+| OTA | `main/ota.cc` |
+| 配网页面 | `managed_components/78__esp-wifi-connect/` |
+| 后台地址 | 配网「高级选项」或 `main/Kconfig.projbuild` |
+| 设备绑定 / 二维码接口 | `main/application.h` 的 `base_url` |
 
 ## 文档
 
 | 文档 | 内容 |
 | --- | --- |
 | [硬件说明](docs/board/hardware.md) | 外设、引脚、分区表 |
-| [编译与烧录](docs/board/build.md) | 环境、编译、烧录、发布 |
+| [编译与烧录](docs/board/build.md) | 环境、编译、产物、烧录、发布 |
 | [配网与 OTA 地址](docs/board/provisioning.md) | 配网页面、高级选项、地址优先级 |
 | [OTA 接口协议](docs/board/ota.md) | 后台接口字段、版本比较、排查 |
 | [常见问题](docs/board/faq.md) | OTA 不触发、反复升级、配网打不开等 |
